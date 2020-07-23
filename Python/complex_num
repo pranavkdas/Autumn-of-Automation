@@ -1,0 +1,57 @@
+class ComplexNumber:
+    def __init__(self,a=0,b=0):
+        isInvalidReal = self._isInvalid(a)
+        isInvalidImg = self._isInvalid(b)
+        if(isInvalidReal and isInvalidImg):
+            raise ValueError("Invalid value for real and imaginary part")
+        elif(isInvalidReal):
+            raise ValueError("Invalid value for real part")
+        elif(isInvalidImg):
+            raise ValueError("Invalid value for imaginary part")
+        else:
+            self.a = a
+            self.b = b
+    
+    @property
+    def real_part(self):
+        return self.a
+    
+    @property
+    def imaginary_part(self):
+        return self.b
+    
+    def _isInvalid(self,x):
+        return type(x) not in [int,float]
+    
+    def __str__(self):
+        sign= "+"if self.b>=0 else ""
+        if not self.a and not self.b:
+            return "0"
+        if not self.a:
+            return "{}i".format(self.b)
+        if not self.b:
+            return "{}".format(self.a)
+        return "{}{}{}i".format(self.a,sign,self.b)
+    
+    def conjugate(self):
+        return ComplexNumber(self.a,-self.b)
+    
+    def __add__(self,c):
+        return ComplexNumber((self.a+c.a),(self.b+c.b))
+    
+    def __sub__(self,c):
+        return ComplexNumber((self.a-c.a),(self.b-c.b))
+    
+    def __mul__(self,c):
+        return ComplexNumber((self.a*c.a- self.b*c.b),(self.a*c.b+ self.b*c.a))
+        
+    def __truediv__(self,c):
+        if(not self.a and not self.b):
+            raise ZeroDivisionError("division by zero")
+        con = c.conjugate()
+        num = (c* con).a
+        return ComplexNumber((self.a*con.a - self.b*con.b)/num,(self.a*con.b+self.b*con.a)/num)
+        
+    def __abs__(self):
+        import math
+        return round(math.sqrt(self.a**2 + self.b**2),3)
