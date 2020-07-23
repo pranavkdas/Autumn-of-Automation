@@ -1,0 +1,5 @@
+import numpy as np
+x = np.random.normal(size=(20,20))
+y = np.random.normal(size=(20,1))
+theta = np.dot(np.linalg.inv(np.dot(x.T,x)),np.dot(x.T,y))
+theta
